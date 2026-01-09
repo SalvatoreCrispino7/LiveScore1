@@ -1,0 +1,118 @@
+{
+  "match_id": "722271",
+  "country_id": "133",
+  "country_name": "World",
+  "league_id": "355",
+  "league_name": "Club Friendlies",
+  "league_year": "2026",
+  "match_date": "2025-12-29",
+  "match_time": "00:00",
+  "match_status": "17",
+  "match_live": "1",
+  "match_round": "",
+  "match_stadium": "",
+  "match_referee": "",
+  "stage_name": "",
+  "fk_stage_key": "",
+  "match_hometeam_id": "9190",
+  "match_hometeam_name": "Irapuato",
+  "match_hometeam_score": "0",
+  "match_hometeam_halftime_score": "0",
+  "match_hometeam_ft_score": "",
+  "match_hometeam_extra_score": "",
+  "match_hometeam_penalty_score": "",
+  "match_hometeam_system": "",
+  "match_awayteam_id": "5355",
+  "match_awayteam_name": "Guadalajara Chivas",
+  "match_awayteam_score": "1",
+  "match_awayteam_halftime_score": "1",
+  "match_awayteam_ft_score": "",
+  "match_awayteam_extra_score": "",
+  "match_awayteam_penalty_score": "",
+  "match_awayteam_system": "",
+  "team_home_badge": "https://apiv3.apifootball.com/badges/9190_irapuato.jpg",
+  "team_away_badge": "https://apiv3.apifootball.com/badges/5355_guadalajara.jpg",
+  "league_logo": "https://apiv3.apifootball.com/badges/logo_leagues/355_club-friendlies.png",
+  "country_logo": "https://apiv3.apifootball.com/badges/logo_country/133_world.png",
+  "goalscorer": [
+    {
+      "time": "8",
+      "home_scorer": "",
+      "home_scorer_id": "",
+      "home_assist": "",
+      "home_assist_id": "",
+      "score": "0 - 1",
+      "away_scorer": "R. Alvarado",
+      "away_scorer_id": "671509019",
+      "away_assist": "",
+      "away_assist_id": "",
+      "info": "",
+      "score_info_time": "1st Half"
+    }
+  ],
+  "substitutions":{
+    "home": [],
+    "away": [
+        {
+            "time": "46",
+            "substitution": "Y. Mina | S. Esposito",
+            "substitution_player_id": "2230153353 | 1502929856"
+        },
+        {
+            "time": "56",
+            "substitution": "M. Prati | L. Mazzitelli",
+            "substitution_player_id": "23517548 | 4269265442"
+        },
+        {
+            "time": "56",
+            "substitution": "Z. Luvumbo | A. Obert",
+            "substitution_player_id": "2581781708 | 1702945176"
+        }
+    ]
+},
+
+  "cards": [],
+  "lineup": {
+    "home": {
+      "starting_lineups": [],
+      "substitutes": [],
+      "coach": [
+        {
+          "lineup_player": "B. Kaya",
+          "lineup_number": "",
+          "lineup_position": "",
+          "player_key": "1839869491"
+        }
+      ],
+      "missing_players": []
+    },
+    "away": {
+      "starting_lineups": [],
+      "substitutes": [],
+      "coach": [
+        {
+          "lineup_player": "İ. Ertekin",
+          "lineup_number": "",
+          "lineup_position": "",
+          "player_key": "2255715815"
+        }
+      ],
+      "missing_players": []
+    }
+  },
+  "statistics": [
+    { "type": "Corners", "home": "0", "away": "0" },
+    { "type": "Throw In", "home": "0", "away": "0" },
+    { "type": "Free Kick", "home": "0", "away": "0" },
+    { "type": "Goal Kick", "home": "0", "away": "0" },
+    { "type": "Penalty", "home": "0", "away": "0" },
+    { "type": "Substitution", "home": "0", "away": "0" },
+    { "type": "Attacks", "home": "19", "away": "17" },
+    { "type": "Dangerous Attacks", "home": "14", "away": "15" },
+    { "type": "On Target", "home": "0", "away": "2" },
+    { "type": "Off Target", "home": "1", "away": "3" },
+    { "type": "Ball Possession", "home": "56%", "away": "44%" }
+  ],
+  "statistics_1half": []
+}
+

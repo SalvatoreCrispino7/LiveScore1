@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>DETTAGLI MATCH</title>
+</head>
+<body>
+<h1>⚽ DETTAGLI MATCH</h1>
+<div id="output" class="detail-container">
+    <p class="no-data">Caricamento dati...</p>
+</div>
+
+<style>
+body{font-family:Arial,sans-serif;background:#111;color:#fff;margin:0;padding:20px;max-width:900px;margin:auto}
+h1{text-align:center;margin-bottom:30px;color:#00d4aa;font-size:2.5rem;font-weight:700}
+.container{background:#1c1c1c;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.5);border:1px solid #333}
+.info{padding:20px;margin:15px 0;background:rgba(0,212,170,0.1);border-left:4px solid #00d4aa;border-radius:8px}
+.team-badges{display:flex;justify-content:center;gap:25px;margin:25px 0;padding:20px;background:rgba(0,0,0,0.3);border-radius:12px}
+.team-badges img{width:80px;height:80px;object-fit:contain;border:2px solid #00d4aa;border-radius:10px;box-shadow:0 4px 15px rgba(0,212,170,0.3)}
+.badge{display:inline-block;background:#ff6b6b;color:white;padding:8px 16px;margin:8px;border-radius:20px;font-weight:bold;font-size:0.9rem;box-shadow:0 3px 10px rgba(255,107,107,0.3)}
+@media(max-width:768px){body{padding:15px}.container{padding:20px}.team-badges{flex-direction:column;gap:15px}.team-badges img{width:60px;height:60px}}
+</style>
+
+<script>
+let socket = new WebSocket("ws://localhost:8888/ws");
+socket.onopen = () => console.log("✅ WebSocket aperto");
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    const match_id = new URLSearchParams(window.location.search).get('match_id');
+    const output = document.getElementById("output");
+    
+    for (const item of data.future) {
+        if (item.match_id === match_id) {
+            output.innerHTML = "";  // Pulisci
+            
+            // Info principali
+            const infoCard = document.createElement("div");
+            infoCard.className = "info-card";
+            infoCard.innerHTML = `
+                <strong>🏆 ${item.match_hometeam_name} vs ${item.match_awayteam_name}</strong><br>
+                📅 ${item.match_date} ⏰ ${item.match_time}
+            `;
+            output.appendChild(infoCard);
+            
+            // Stadio
+            if (item.match_stadium) {
+                const stadiumBadge = document.createElement("span");
+                stadiumBadge.className = "stadium-badge";
+                stadiumBadge.textContent = `🏟️ ${item.match_stadium}`;
+                output.appendChild(stadiumBadge);
+            }
+            
+            // Fase
+            if (item.stage_name && item.stage_name !== "Current") {
+                const phaseBadge = document.createElement("span");
+                phaseBadge.className = "phase-badge";
+                phaseBadge.textContent = `🏆 ${item.stage_name}`;
+                output.appendChild(phaseBadge);
+            }
+            
+            // Badge squadre
+            const badgesDiv = document.createElement("div");
+            badgesDiv.className = "team-badges";
+            const imgHome = document.createElement("img"); imgHome.src = item.team_home_badge || "";
+            const imgAway = document.createElement("img"); imgAway.src = item.team_away_badge || "";
+            badgesDiv.append(imgHome, imgAway);
+            output.appendChild(badgesDiv);
+            console.log(item);
+            break;
+        }
+    }
+};
+</script>
+</body>
+</html>

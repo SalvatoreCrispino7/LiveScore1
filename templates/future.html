@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Live</title>
+</head>
+
+<body>
+    <h1>Live</h1>
+    <div id="output"></div>
+    <style>
+        body{background:#0a0a0a;color:#e5e5e5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:40px 20px;max-width:900px;margin:0 auto;min-height:100vh}
+        h1{color:#00d4aa;font-size:2.2rem;font-weight:700;margin:0 0 50px;text-align:center}
+        h2{color:#fff;font-size:1.3rem;font-weight:600;margin:30px 0 20px;padding-bottom:8px;border-bottom:2px solid #333}
+        #output{display:flex;flex-direction:column;gap:12px}
+        .match{display:flex;align-items:center;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;text-decoration:none;color:inherit;transition:all .2s}
+        .match:hover{background:#222;border-color:#00d4aa;transform:translateX(4px)}
+        .match img{width:42px;height:42px;border-radius:6px;object-fit:cover;border:1px solid #333;margin-right:16px}
+        .match img:last-of-type{margin-right:0;margin-left:16px}
+        #output p{font-size:1.1rem;font-weight:600;color:#fff;margin:0;flex:1;text-align:center}
+        @media(max-width:768px){body{padding:20px 16px}.match{flex-wrap:wrap;gap:12px;justify-content:center}.match img{width:38px;height:38px;margin:0 8px}}
+    </style>
+    <script>
+        let socket = new WebSocket("ws://localhost:8888/ws");
+        socket.onopen = () => console.log("WebSocket aperto");
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const container = document.getElementById("output");
+            container.innerHTML = "";
+            const grouped = {};
+
+            for (const item of data.future) 
+                if (!(item.league_id in grouped))
+                    grouped[item.league_id] = [item]
+                else 
+                    grouped[item.league_id].push(item);
+
+
+
+
+            for (const leagueId in grouped) {
+                const title = document.createElement("h2");
+                title.innerHTML =
+                    grouped[leagueId][0].league_name + " - " +
+                    grouped[leagueId][0].country_name +
+                    ` <img src="${grouped[leagueId][0].country_logo}" style="height:20px; vertical-align:middle;">`;
+                container.appendChild(title);
+               
+                for (const item of grouped[leagueId]) {
+
+                    const matchBox = document.createElement("a");
+                    matchBox.className = "match";
+                    if (item.match_live === "1") {
+                        var state = "live";
+                    } else {
+                        if (item.match_status === "Finished") 
+                            var state = "finished";
+                        else
+                            var state = "notlive";
+                    }
+
+                    matchBox.href = `dettagli?match_id=${item.match_id}&status=${state}`;
+
+                    const imgHome = document.createElement("img");
+                    imgHome.src = item.team_home_badge;
+
+                    const imgAway = document.createElement("img");
+                    imgAway.src = item.team_away_badge;
+
+                    const p = document.createElement("p");
+                    
+                    if (item.match_status === "Finished" || item.match_status === "After Pen.") {
+                        p.innerText = `${item.match_hometeam_score} - ${item.match_awayteam_score}`;
+                        matchBox.append(imgHome, p, imgAway);
+                        container.appendChild(matchBox);
+                        continue;
+                    }
+                    else if (item.match_status === "Postponed")
+                        p.innerText = `PARTITA RINVIATA`;
+                        matchBox.append(imgHome, p, imgAway);
+                        container.appendChild(matchBox);
+                        continue;
+                    
+                    p.innerText = `${item.match_hometeam_name} vs ${item.match_awayteam_name} Orario: ${item.match_time}`;
+                    matchBox.append(imgHome, p, imgAway);
+                    container.appendChild(matchBox);
+                }
+
+                
+            }
+        };
+    </script>
+</body>
+</html>
