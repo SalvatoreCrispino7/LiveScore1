@@ -7,12 +7,6 @@ import asyncio
 
 data_PARTITE = []
 
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html")
-
-
 class LiveHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("live.html")
@@ -73,7 +67,7 @@ class WebSocketCalcio(tornado.websocket.WebSocketHandler):
         for match in data:
 
             if match["match_date"] == start and  match.get("match_status") != "":
-                if match.get("match_live") == "1" and match.get("match_status") not in ["Finished", "After Pen.", "Postponed"]:
+                if match.get("match_live") == "1" and match.get("match_status") not in ["Finished", "After Pen.", "Postponed","Not Started"]:
                     live_matches.append(match)
                 else:
                     future_matches.append(match)
@@ -88,7 +82,6 @@ class WebSocketCalcio(tornado.websocket.WebSocketHandler):
 
 async def main():
     app = tornado.web.Application([
-        (r"/", MainHandler),
         (r"/live", LiveHandler),
         (r"/future", FutureHandler),
         (r"/ws", WebSocketCalcio),
@@ -97,7 +90,7 @@ async def main():
 
 
     app.listen(8888)
-    print("Server avviato su http://localhost:8888")
+    print("Server avviato su http://localhost:8888/live")
     await asyncio.Event().wait()
 
 

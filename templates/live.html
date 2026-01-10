@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Live</title>
     <style>
+        .sticky-bar{position:sticky;top:0;z-index:1000;display:flex;justify-content:center;gap:20px;background:#111;padding:12px}.sticky-bar a{color:white;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px}.sticky-bar .live{background:red}.sticky-bar .oggi{background:#444}.sticky-bar a:hover{opacity:.85}
         body{background:#0a0a0a;color:#e5e5e5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:40px 20px;max-width:900px;margin:0 auto;min-height:100vh}
         h1{color:#00d4aa;font-size:2.2rem;font-weight:700;margin:0 0 50px;text-align:center}
         h2{color:#fff;font-size:1.3rem;font-weight:600;margin:30px 0 20px;padding-bottom:8px;border-bottom:2px solid #333}
@@ -18,6 +19,12 @@
 </head>
 <body>
     <h1>Live</h1>
+
+    <div class="sticky-bar">
+      <a href="/live" class="live">LIVE</a>
+      <a href="/future" class="oggi">OGGI</a>
+    </div>
+
     <div id="output"></div>
     <script>
         let socket = new WebSocket("ws://localhost:8888/ws");
