@@ -3,30 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Live</title>
+    <link rel="stylesheet" href="/static/dettagli_match.css">
+
 </head>
 
 <body>
-    <style>
-    .sticky-bar{position:sticky;top:0;z-index:1000;display:flex;justify-content:center;gap:20px;background:#111;padding:12px}.sticky-bar a{color:white;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px}.sticky-bar .live{background:red}.sticky-bar .oggi{background:#444}.sticky-bar a:hover{opacity:.85}
-        body{background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 100%);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;margin:0;padding:20px;min-height:100vh}
-        h1{text-align:center;margin-bottom:30px;font-size:2.5rem;background:linear-gradient(90deg,#00d4ff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        h2{margin-top:30px;margin-bottom:15px;border-bottom:2px solid #00d4ff;padding-bottom:8px;font-size:1.5rem;color:#00d4ff}
-        h3{margin-top:15px;margin-bottom:10px;color:#00ff88;font-size:1.2rem}
-        ul{list-style:none;padding:0;margin:0}
-        li{padding:8px 12px;margin:4px 0;background-color:rgba(255,255,255,0.05);border-radius:4px;border-left:3px solid #00d4ff;transition:all 0.3s ease}
-        li:hover{background-color:rgba(0,212,255,0.1);transform:translateX(5px)}
-        #output{max-width:1100px;margin:auto}
-        .detail-view{background:linear-gradient(145deg,#1c1c1c 0%,#252525 100%);padding:30px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5),0 0 20px rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2)}
-        .team-logos{display:flex;align-items:center;justify-content:space-between;margin:30px 0;padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(255,255,255,0.1)}
-        .team-logos img{width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,212,255,0.3));transition:transform 0.3s ease}
-        .team-logos img:hover{transform:scale(1.1)}
-        .score-display{text-align:center;flex:1;padding:0 20px}
-        .score-display>div:first-child,.score-display>div:last-child{font-size:1.2rem;font-weight:600;margin:10px 0;color:#00ff88}
-        .score-display>div:nth-child(2){font-size:4rem;font-weight:bold;margin:15px 0;background:linear-gradient(90deg,#00d4ff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-        .live-badge{background:linear-gradient(135deg,#ff0000,#ff4444);color:white;padding:6px 16px;font-size:14px;font-weight:bold;border-radius:20px;display:inline-block;box-shadow:0 0 20px rgba(255,0,0,0.5);animation:pulse 2s infinite}
-        @keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(255,0,0,0.5)}50%{box-shadow:0 0 30px rgba(255,0,0,0.8)}}
-        @media(max-width:768px){body{padding:10px}.detail-view{padding:20px}.team-logos{flex-direction:column;gap:20px}.team-logos img{width:60px;height:60px}.score-display>div:nth-child(2){font-size:3rem}h1{font-size:1.8rem}}
-    </style>
     <h1>⚽ Live Score</h1>
 
     <div class="sticky-bar">
@@ -51,21 +32,21 @@
                     output.innerHTML = "";
 
                     const detailView = document.createElement("div");
-                    detailView.className = "detail-view";
-
-                    // LIVE Badge
                     const liveWrapper = document.createElement("div");
-                    liveWrapper.style.textAlign = "center";
-                    liveWrapper.style.marginBottom = "20px";
-
                     const liveBadge = document.createElement("span");
+                    
                     liveBadge.className = "live-badge";
-                    liveBadge.textContent = "LIVE";
 
                     liveWrapper.appendChild(liveBadge);
                     detailView.appendChild(liveWrapper);
 
                     // Team Logos + Score
+                    const scoreDisplay = document.createElement("div");
+                    scoreDisplay.className = "score-display";
+                    scoreDisplay.style.display = "flex";
+                    scoreDisplay.style.alignItems = "center";
+                    scoreDisplay.style.gap = "1rem";
+
                     const teamLogos = document.createElement("div");
                     teamLogos.className = "team-logos";
 
@@ -73,18 +54,17 @@
                     homeLogo.src = item.team_home_badge;
                     teamLogos.appendChild(homeLogo);
 
-                    const scoreDisplay = document.createElement("div");
-                    scoreDisplay.className = "score-display";
-
-                    const homeName = document.createElement("div");
-                    homeName.textContent = item.match_hometeam_name;
-
                     const score = document.createElement("div");
                     score.style.fontSize = "4rem";
                     score.textContent = `${item.match_hometeam_score} - ${item.match_awayteam_score}`;
 
-                    const awayName = document.createElement("div");
+                    const homeName = document.createElement("span");  // ← SPAN invece di div
+                    homeName.textContent = item.match_hometeam_name;
+
+                    const awayName = document.createElement("span");  // ← SPAN invece di div
                     awayName.textContent = item.match_awayteam_name;
+
+
 
                     scoreDisplay.appendChild(homeName);
                     scoreDisplay.appendChild(score);
@@ -102,7 +82,15 @@
                     const minuteDiv = document.createElement("div");
                     minuteDiv.style.textAlign = "center";
                     minuteDiv.style.margin = "20px 0";
-                    minuteDiv.textContent = `⏱️ Minuto: ${item.match_status}`;
+
+                    const minuto = parseInt(item.match_status);
+
+                    if (!isNaN(minuto)) {
+                        minuteDiv.textContent = `⏱️ Minuto: ${minuto}`;
+                    } 
+                    else {
+                        minuteDiv.textContent = `${item.match_status}`;
+                    }
                     detailView.appendChild(minuteDiv);
 
 
@@ -127,37 +115,46 @@
                     const uscitiDiv = document.createElement("div");
                     //qua
                     uscitiDiv.className = "usciti";
-                    if (ho_sostituti.length > 0 || aw_sostituti.length > 0)
+                    if (item.lineup.away.length > 0 && item.lineup.home.length > 0)
                     {
                         const subsTitle = document.createElement("h2");
                         subsTitle.textContent = "🔄 SOSTITUZIONI";
                         uscitiDiv.appendChild(subsTitle)
                     }
 
-                for (const id of ho_sostituti)
+                for (const id of ho_subentrati)
                     {
-                        for (const giocatore of item.lineup.home.starting_lineups)
+                        for (const giocatore of item.lineup.home.substitutes)
                             {
                                 if (giocatore.player_key === id)
-                                    uscitiDiv.innerHTML += `<div style="text-align: left;">🔻 ${giocatore.lineup_player}</div><br>`;
+                                    uscitiDiv.innerHTML += `
+                                    <div style="text-align: left;">
+                                        <span style="color: green;"><b>⇄</b></span>
+                                        ${giocatore.lineup_player}
+                                    </div><br>`;
                             }
                     }
-                    for (const id of aw_sostituti)
-                    {
-                        for (const giocatore of item.lineup.away.starting_lineups)
-                            {
-                                if (giocatore.player_key === id)
-                                    uscitiDiv.innerHTML += `<div style="text-align: right;">🔻 ${giocatore.lineup_player}</div><br>`;
-                            }
-                    }
+                for (const id of aw_subentrati)
+                {
+                    for (const giocatore of item.lineup.away.substitutes)
+                        {
+                            if (giocatore.player_key === id)
+                                uscitiDiv.innerHTML += `
+                                <div style="text-align: right;">
+                                    <span style="color: green;"><b>⇄</b></span>
+                                    ${giocatore.lineup_player}
+                                </div><br>`;
+                        }
+                }
 
 
                     // Lineups Section
                     if (item.lineup && item.lineup.home && item.lineup.away) {
-                        const lineupTitle = document.createElement("h2");
-                        lineupTitle.textContent = "🏃‍♂️ Formazioni";
-                        detailView.appendChild(lineupTitle);
-
+                        if (item.lineup.home.starting_lineups.length > 0 && item.lineup.away.starting_lineups.length){    
+                            const lineupTitle = document.createElement("h2");
+                            lineupTitle.textContent = "🏃‍♂️ Formazioni";
+                            detailView.appendChild(lineupTitle);
+                        }
                         const lineupContainer = document.createElement("div");
                         lineupContainer.style.display = "grid";
                         lineupContainer.style.gridTemplateColumns = "1fr 1fr";
@@ -179,9 +176,15 @@
                                 const li = document.createElement("li");
 
                                 if (ho_sostituti.includes(p.player_key))
-                                    li.textContent = `${p.lineup_number} - ${p.lineup_player}🔻`;
+                                    li.innerHTML = `
+                                            <span style="color: red;">
+                                            <b>⇄</b>
+                                            </span>
+                                            ${p.lineup_number} - ${p.lineup_player}
+                                        </div><br>
+                                    `;
                                 else
-                                    li.textContent = `${p.lineup_number} - ${p.lineup_player}`;
+                                    li.innerHTML = `${p.lineup_number} - ${p.lineup_player}`;
 
                                 homeList.appendChild(li);
                             });
@@ -282,7 +285,7 @@
                                 cardType = "🟨";
                             }
 
-                                                        if (card.home_fault) {
+                            if (card.home_fault) {
                                 player = card.home_fault;
                                 align = "left";
                             } else {
@@ -291,7 +294,7 @@
                             }
 
                             const cardItem = document.createElement("p");
-                            cardItem.textContent = `${cardType} ${player} (${card.time || 'N/D'})`;
+                            cardItem.textContent = `${cardType} ${player} (${card.time + '"' || 'N/D'})`;
                             cardItem.style.textAlign = align;
                             cards_div.appendChild(cardItem);
                         }
