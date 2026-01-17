@@ -1,0 +1,36 @@
+/* Barra in alto */
+.sticky-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background-color: #181822;
+    padding: 12px;
+    font-family: "Inter", sans-serif;
+}
+
+/* Link nella barra */
+.sticky-bar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+/* Pulsante LIVE rosso */
+.sticky-bar .live {
+    background-color: red;
+}
+
+/* Pulsante OGGI grigio */
+.sticky-bar .oggi {
+    background-color: #3cc01b;
+}
+
+/*sopra col mouse */
+.sticky-bar a:hover {
+    opacity: 0.85;
+}

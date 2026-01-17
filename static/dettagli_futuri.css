@@ -1,0 +1,78 @@
+/* Pagina */
+body {
+    background-color: #181822;
+    color: white;
+    padding: 20px;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+
+}
+
+/* Titolo grande */
+h1 {
+    color: cyan;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Card informazioni match */
+.info-card {
+    background-color: #252525;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+.info-card strong {
+    color: cyan;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Badge stadio e fase */
+/* Badge stadio e fase - CORREZIONE */
+.stadium-badge,
+.phase-badge {
+    display: block;
+    background-color: #222;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 10px auto;
+    width: fit-content;
+    text-align: center;
+}
+
+
+.stadium-badge {
+    color: gold;
+}
+
+.phase-badge {
+    color: lightgreen;
+    text-align: center;
+}
+
+/* Contenitore loghi */
+.team-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.team-badges img {
+    width: 100px;
+    height: 100px;
+}
+
+/* Contenitore generale */
+#output {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
