@@ -1,4 +1,2 @@
 tornado
 datetime
-requests
-asyncio

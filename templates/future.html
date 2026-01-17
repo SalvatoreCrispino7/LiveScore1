@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>OGGI</title>
     <link rel="stylesheet" href="/static/view_score.css">
+    <link rel="stylesheet" href="/static/sticky.css">
+    <link rel="icon" type="image/vnd.icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
-
 
 <body>
     <h1>OGGI</h1>
@@ -16,102 +17,11 @@
     </div>
 
     <div id="output"></div>
-    <style>
-        
-    </style>
     <script>
-        let socket = new WebSocket("ws://localhost:8888/ws");
-        socket.onopen = () => console.log("WebSocket aperto");
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            const container = document.getElementById("output");
-            container.innerHTML = "";
-            const grouped = {};
-
-            for (const item of data.future) 
-                if (!(item.league_id in grouped))
-                    grouped[item.league_id] = [item]
-                else 
-                    grouped[item.league_id].push(item);
-
-
-            for (const leagueId in grouped) {
-                const title = document.createElement("h2");
-                let league_name = grouped[leagueId][0].league_name
-                if (grouped[leagueId][0].league_name === "intl") {league_name = "Internazionale"}
-
-                title.innerHTML =
-                    league_name + " - " +
-                    grouped[leagueId][0].country_name +
-                    ` <img src="${grouped[leagueId][0].country_logo}" style="height:20px; vertical-align:middle;">`;
-                container.appendChild(title);
-                for (const item of grouped[leagueId]) {
-
-                    const matchBox = document.createElement("a");
-                    matchBox.className = "match";
-                    if (item.match_live === "1") {
-                        var state = "live";
-                    } else {
-                        if (item.match_status === "Finished") 
-                            var state = "finished";
-                        else
-                            var state = "notlive";
-                    }
-
-                    matchBox.href = `dettagli?match_id=${item.match_id}&status=${state}`;
-
-                    const imgHome = document.createElement("img");
-                    const imgAway = document.createElement("img");
-
-
-                    if (item.team_home_badge === "")
-                        imgHome.src =  "/static/no_logo.png";
-                    else
-                        imgHome.src = item.team_home_badge;
-
-                    if (item.team_away_badge === "")
-                        imgAway.src =  "/static/no_logo.png";   
-                    else
-                        imgAway.src = item.team_away_badge;
-
-                    const p = document.createElement("p");
-                    switch (true) {
-
-                        case !isNaN(parseInt(item.match_status)):
-                            p.innerHTML = `LIVE: ${item.match_hometeam_score} - ${item.match_awayteam_score}<br>⏱️ ${item.match_status}"`;
-                            break;
-
-                        case item.match_status === "Penalties":
-                        case item.match_status === "Half Time":
-                            p.innerHTML = `LIVE: ${item.match_hometeam_score} - ${item.match_awayteam_score}<br>⏱️ ${item.match_status}`;
-                            break;
-
-                        case item.match_status === "Finished":
-                        case item.match_status === "After Pen.":
-                            p.innerText = `${item.match_hometeam_score} - ${item.match_awayteam_score}`;
-                            break;
-
-                        case item.match_status === "Postponed":
-                            p.innerText = `PARTITA RINVIATA`;
-                            break;
-
-                        case item.match_status === "Cancelled":
-                            p.innerText = `PARTITA CANCELLATA`;
-                            break;
-
-                        default:
-                            p.innerText = `${item.match_hometeam_name} vs ${item.match_awayteam_name} Orario: ${item.match_time}`;
-                            break;
-                    }
-
-                    matchBox.append(imgHome, p, imgAway);
-                    container.appendChild(matchBox);}
-
-                }
-
-                
-            }
-        ;
+        let mode = "finished";
     </script>
+    <script src="/static/pagine.js"></script>
+
+
 </body>
 </html>

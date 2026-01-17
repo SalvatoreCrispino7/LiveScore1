@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <title>Live</title>
     <link rel="stylesheet" href="/static/view_score.css">
+    <link rel="stylesheet" href="/static/sticky.css">
+    <link rel="icon" type="image/vnd.icon" href="/assets/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Live</h1>
+    <h1>LIVE</h1>
 
     <div class="sticky-bar">
       <a href="/live" class="live">LIVE</a>
@@ -15,71 +19,10 @@
 
     <div id="output"></div>
     <script>
-        let socket = new WebSocket("ws://localhost:8888/ws");
-        socket.onopen = () => console.log("WebSocket aperto");
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            const container = document.getElementById("output");
-            container.innerHTML = "";
-            const grouped = {};
-            for (const item of data.live) 
-                if (!(item.league_id in grouped))
-                    grouped[item.league_id] = [item]
-                else 
-                    grouped[item.league_id].push(item);
-
-            for (const leagueId in grouped) {
-                const title = document.createElement("h2");
-                title.innerText = grouped[leagueId][0].league_name + " - " + grouped[leagueId][0].country_name;
-                container.appendChild(title);
-                for (const item of grouped[leagueId]) {
-                    const matchBox = document.createElement("a");
-                    matchBox.className = "match";
-
-                    if (item.match_live === "1") {
-                        var state = "live";
-                    } else {
-                        if (item.match_status === "Finished") 
-                            var state = "finished";
-                        else
-                            var state = "notlive";
-                    }
-
-                    matchBox.href = `dettagli?match_id=${item.match_id}&status=${state}`;
-                    
-                    const imgHome = document.createElement("img");
-                    const imgAway = document.createElement("img");
-
-
-                    if (item.team_home_badge === "")
-                        imgHome.src =  "/static/no_logo.png";
-                    else
-                        imgHome.src = item.team_home_badge;
-
-                    if (item.team_away_badge === "")
-                        imgAway.src =  "/static/no_logo.png";  
-                    else
-                        imgAway.src = item.team_away_badge;
-
-                    
-                    const p = document.createElement("p");
-                    
-                    const minuto = parseInt(item.match_status);
-
-                    let minuti_text;
-                    if (!isNaN(minuto)) {
-                        minuti_text = `⏱️ ${item.match_status}"`;
-                    } 
-                    else {
-                        minuti_text = `${item.match_status}`;
-                    }
-
-                    p.innerText = `${item.match_hometeam_name} vs ${item.match_awayteam_name}\n ${item.match_hometeam_score} - ${item.match_awayteam_score} \n ${minuti_text}`;
-                    matchBox.append(imgHome, p, imgAway);
-                    container.appendChild(matchBox);
-                }
-            }
-        };
+        let mode = "live";
     </script>
+    <script src="/static/pagine.js"></script>
+
+
 </body>
 </html>

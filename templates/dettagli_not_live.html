@@ -2,70 +2,79 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/sticky.css">
+    <link rel="stylesheet" href="\static\dettagli_futuri.css">
+    <link rel="icon" type="image/vnd.icon" href="/assets/football.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>DETTAGLI MATCH</title>
-    <link rel="stylesheet" href="/static/view_score.css">
-
 </head>
 <body>
-<h1>⚽ DETTAGLI MATCH</h1>
-</div>
-    <div class="sticky-bar">
-      <a href="/live" class="live">LIVE</a>
-      <a href="/future" class="oggi">OGGI</a>
-</div>
-<div id="output" class="detail-container">
-    <p class="no-data">Caricamento dati...</p>
-
-
-<script>
-let socket = new WebSocket("ws://localhost:8888/ws");
-socket.onopen = () => console.log("✅ WebSocket aperto");
-socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    const match_id = new URLSearchParams(window.location.search).get('match_id');
-    const output = document.getElementById("output");
+    <h1>⚽ DETTAGLI MATCH</h1>
     
-    for (const item of data.future) {
-        if (item.match_id === match_id) {
-            output.innerHTML = "";  // Pulisci
+    <div class="sticky-bar">
+        <a href="/live" class="live">LIVE</a>
+        <a href="/future" class="oggi">OGGI</a>
+    </div>
+    
+    <div id="output" class="detail-container">
+        <p class="no-data">Caricamento dati...</p>
+    </div>
+
+    <script>
+        let socket = new WebSocket("ws://localhost:8888/ws");
+        socket.onopen = () => console.log("✅ WebSocket aperto");
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const match_id = new URLSearchParams(window.location.search).get('match_id');
+            const output = document.getElementById("output");
             
-            // Info principali
-            const infoCard = document.createElement("div");
-            infoCard.className = "info-card";
-            infoCard.innerHTML = `
-                <strong>🏆 ${item.match_hometeam_name} vs ${item.match_awayteam_name}</strong><br>
-                📅 ${item.match_date} ⏰ ${item.match_time}
-            `;
-            output.appendChild(infoCard);
-            
-            // Stadio
-            if (item.match_stadium) {
-                const stadiumBadge = document.createElement("span");
-                stadiumBadge.className = "stadium-badge";
-                stadiumBadge.textContent = `🏟️ ${item.match_stadium}`;
-                output.appendChild(stadiumBadge);
+            for (const item of data.future) {
+                if (item.match_id === match_id) {
+                    output.innerHTML = "";  // Pulisci
+                    
+                    // Info principali
+                    const infoCard = document.createElement("div");
+                    infoCard.className = "info-card";
+                    infoCard.innerHTML = `
+                        <div style="text-align:center;">
+                            <strong>🏆 ${item.match_hometeam_name} vs ${item.match_awayteam_name}</strong><br>
+                            📅 ${item.match_date} ⏰ ${item.match_time}
+                        </div>
+                    `;
+
+                    output.appendChild(infoCard);
+                    
+                    // Stadio
+                    if (item.match_stadium) {
+                        const stadiumBadge = document.createElement("span");
+                        stadiumBadge.className = "stadium-badge";
+                        stadiumBadge.textContent = `🏟️ ${item.match_stadium}`;
+                        output.appendChild(stadiumBadge);
+                    }
+                    
+                    // Fase
+                    if (item.stage_name && item.stage_name !== "Current") {
+                        const phaseBadge = document.createElement("span");
+                        phaseBadge.className = "phase-badge";
+                        phaseBadge.textContent = `🏆 ${item.stage_name}`;
+                        output.appendChild(phaseBadge);
+                    }
+                    
+                    // Badge squadre
+                    const badgesDiv = document.createElement("div");
+                    badgesDiv.className = "team-badges";
+                    const imgHome = document.createElement("img"); 
+                    imgHome.src = item.team_home_badge || "/assets/no_logo.png";
+                    const imgAway = document.createElement("img"); 
+                    imgAway.src = item.team_away_badge || "/assets/no_logo.png";
+                    badgesDiv.append(imgHome, imgAway);
+                    output.appendChild(badgesDiv);
+                    console.log(item);
+                    break;
+                }
             }
-            
-            // Fase
-            if (item.stage_name && item.stage_name !== "Current") {
-                const phaseBadge = document.createElement("span");
-                phaseBadge.className = "phase-badge";
-                phaseBadge.textContent = `🏆 ${item.stage_name}`;
-                output.appendChild(phaseBadge);
-            }
-            
-            // Badge squadre
-            const badgesDiv = document.createElement("div");
-            badgesDiv.className = "team-badges";
-            const imgHome = document.createElement("img"); imgHome.src = item.team_home_badge || "";
-            const imgAway = document.createElement("img"); imgAway.src = item.team_away_badge || "";
-            badgesDiv.append(imgHome, imgAway);
-            output.appendChild(badgesDiv);
-            console.log(item);
-            break;
-        }
-    }
-};
-</script>
+        };
+    </script>
 </body>
 </html>
